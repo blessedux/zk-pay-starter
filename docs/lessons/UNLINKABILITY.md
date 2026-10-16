@@ -22,5 +22,5 @@ TODO(GAP-8): complete this checklist → docs/lessons/UNLINKABILITY.md
 - Funding of the fresh address:
 - Amount (fixed denomination):
 
-When every box is honestly checked, delete the `TODO(GAP-8)` line so
+When every box is honestly checked, delete the TODO line at the top so
 `bun run gaps` can turn this row green.

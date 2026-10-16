@@ -17,7 +17,7 @@ export const TOOL_INSTALL = {
     "See ./scripts/install-tools.sh (picks macOS/Linux + arch). Or: https://github.com/stellar/stellar-cli/releases/tag/v28.1.0",
   nargo:
     "curl -L https://raw.githubusercontent.com/noir-lang/noirup/main/install | bash && noirup -v 1.0.0-beta.9",
-  bb: "curl -L https://raw.githubusercontent.com/AztecProtocol/aztec-packages/master/barretenberg/cpp/installation/install | bash && bbup -v 0.87.0",
+  bb: "curl -L https://raw.githubusercontent.com/AztecProtocol/aztec-packages/master/barretenberg/bbup/install | bash && bbup -v 0.87.0",
   circom: "See ./scripts/install-tools.sh (circom 2.1.9 binary for macOS/Linux).",
   bun: "curl -fsSL https://bun.sh/install | bash",
 };

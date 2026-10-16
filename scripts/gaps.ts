@@ -78,11 +78,14 @@ const GAPS: Gap[] = [
   },
 ];
 
-async function markerPresent(marker: string): Promise<boolean> {
-  const r = await $`grep -r ${marker} --include='*.ts' --include='*.tsx' --include='*.rs' --include='*.nr' --include='*.circom' --include='*.md' .`.cwd(
+// A marker counts only where it starts a line or a comment. Mentions inside
+// strings (this script, tests, assert messages) or backticks (docs) do not.
+async function markerFiles(marker: string): Promise<string[]> {
+  const pattern = `(^|//|/\\*|#)[[:space:]*]*${marker.replace(/[()]/g, "\\$&")}`;
+  const r = await $`grep -rlE ${pattern} --include='*.ts' --include='*.tsx' --include='*.rs' --include='*.nr' --include='*.circom' --include='*.md' --exclude-dir=node_modules --exclude-dir=target .`.cwd(
     ROOT,
   ).nothrow().quiet();
-  return r.exitCode === 0 && (r.stdout.toString().length > 0);
+  return r.stdout.toString().split("\n").filter(Boolean);
 }
 
 console.log("zk-pay-starter gap status\n");
@@ -96,7 +99,7 @@ console.log("-".repeat(88));
 
 let red = 0;
 for (const g of GAPS) {
-  const todo = await markerPresent(g.marker);
+  const todo = (await markerFiles(g.marker)).length > 0;
   const status = todo ? "RED" : "GREEN?";
   if (todo) red++;
   const color = todo ? "\x1b[31m" : "\x1b[32m";
@@ -113,7 +116,6 @@ console.log(
 );
 console.log("A gap is truly green only when its named test passes.\n");
 
-const grep = await $`grep -r "TODO(GAP-" --include='*.ts' --include='*.tsx' --include='*.rs' --include='*.nr' --include='*.circom' --include='*.md' . | grep -v node_modules | grep -v target | grep -v docs/lessons | wc -l`
-  .cwd(ROOT)
-  .text();
-console.log(`TODO(GAP-*) hits outside docs/lessons: ${grep.trim()}`);
+const files = await markerFiles("TODO(GAP-");
+console.log(`Files with TODO(GAP-*) markers left: ${files.length}`);
+for (const f of files) console.log(`  ${f}`);
