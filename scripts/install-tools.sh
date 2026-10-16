@@ -63,7 +63,8 @@ echo "✓ $(nargo --version | head -1)"
 
 if ! command -v bb >/dev/null 2>&1 || ! bb --version 2>/dev/null | grep -q 0.87.0; then
   echo "→ bb 0.87.0"
-  curl -L https://raw.githubusercontent.com/AztecProtocol/aztec-packages/master/barretenberg/cpp/installation/install | bash
+  # The legacy cpp/installation/install ships a stale bbup that cannot fetch 0.87.0.
+  curl -L https://raw.githubusercontent.com/AztecProtocol/aztec-packages/master/barretenberg/bbup/install | bash
   export PATH="${HOME}/.bb:$PATH"
   bbup -v 0.87.0
 fi

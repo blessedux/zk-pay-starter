@@ -11,9 +11,10 @@ const ROOT = join(import.meta.dir, "..");
 console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
 console.log("Building contracts");
 console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n");
-await $`stellar contract build --package verifier-ultrahonk --package verifier-groth16 --package hello-gate --package pool`.cwd(
-  ROOT,
-);
+// stellar-cli 28 accepts a single --package per build.
+for (const pkg of ["verifier-ultrahonk", "verifier-groth16", "hello-gate", "pool"]) {
+  await $`stellar contract build --package ${pkg}`.cwd(ROOT);
+}
 
 console.log("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
 console.log("Building Noir hello");
